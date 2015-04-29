@@ -4,9 +4,15 @@ namespace Project\Controllers;
 use Ionian\Core\Controller;
 use Ionian\Database\Database;
 
+
+/*
+ * Use the URL bar to search the API.
+ * For example, http://localhost/jamwie/artist/name/ARTISTNAME gives info about the specific artist.
+ */
+
 class artistController extends Controller {
     /**
-     * jamwie/artist/all gives us all artists and the events they have planned.
+     * jamwie/artist/all generates all artists and the events they have planned.
      */
     public function allAction() {
         $db = Database::get();
@@ -35,7 +41,8 @@ class artistController extends Controller {
         $this->outputJSON("All artists and their events", $artists);
     }
     /**
-     * Parameter $id must be set. Get all events at the venue with venue id '$id'.
+     * jamwie/artist/name/$name
+     * Parameter $name must be set. Get all upcoming events for the artist '$name'.
      */
     public function nameAction($name) {
         $db = Database::get();
