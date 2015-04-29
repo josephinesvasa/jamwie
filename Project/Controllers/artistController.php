@@ -137,7 +137,4 @@ class artistController extends Controller {
         }
         $this->outputJSON("All available for Songkick artist ID $id", $artists);
     }
-
-
-
 }
