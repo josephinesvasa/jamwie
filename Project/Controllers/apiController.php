@@ -12,7 +12,7 @@ class apiController extends Controller {
         //$this->getLastfmApiAction("Carubine");
     }
     public function getSongkickApiAction(){
-        $data = file_get_contents("http://api.songkick.com/api/3.0/events.json?apikey=4lLW1CkAU1uKMqJl&location=sk:32252&min_date=2015-04-27&max_date=2015-04-28");
+        $data = file_get_contents("http://api.songkick.com/api/3.0/events.json?apikey=4lLW1CkAU1uKMqJl&location=sk:32252&min_date=2015-04-29&max_date=2015-04-30");
         $data = json_decode($data, true);
         $data=$data["resultsPage"]["results"]["event"];
         return $data;
@@ -91,10 +91,10 @@ class apiController extends Controller {
             $stm->bindParam(":venue_latlng", $latlng);
             $stm->bindParam(":venue_map", $venue_map);
             $stm->bindParam(":venue_map_image", $venue_map_image);
-            if($stm->execute()){
-                $last_venue_id=$db->lastInsertId();
-                echo $last_venue_id;
-            }
+            //if($stm->execute()){
+              //  $last_venue_id=$db->lastInsertId();
+               // echo $last_venue_id;
+            //}
 
             //Event
             $event_org_id=$data[$i]["id"];
