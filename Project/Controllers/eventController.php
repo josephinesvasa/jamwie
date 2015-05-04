@@ -16,10 +16,11 @@ class eventController extends Controller {
      */
     public function allAction() {
         $db = Database::get();
-        $stm = $db->prepare("SELECT * FROM events JOIN venues ON events.venue_id = venues.venue_id");
+        $stm = $db->prepare("SELECT * FROM events");
+        // $stm = $db->prepare("SELECT * FROM events JOIN venues ON events.venue_id = venues.venue_id");
         $stm->execute();
-        $res = $stm->fetchAll(Database::FETCH_ASSOC);
-        $eventIDs = array();
+        $res = $stm->fetchAll();
+        /*$eventIDs = array();
         $events = array();
         foreach ($res as $event) {
             $eventIDs[] = (int)$event['event_id'];
@@ -32,8 +33,8 @@ class eventController extends Controller {
         foreach ($results as $result) {
             $events[$result['event_id']]['artists'][] = array('artist_id' => $result['artist_id'], 'artist_org_id' => $result['artist_org_id'],
             'artist_name' => $result['artist_name'], 'artist_image' => $result['artist_image']);
-        }
-        $this->outputJSON("All events", $events);
+        }*/
+        $this->outputJSON("All events", $res);
     }
 
     /**
@@ -41,11 +42,12 @@ class eventController extends Controller {
      */
     public function idAction($id) {
         $db = Database::get();
-        $stm = $db->prepare("SELECT * FROM events JOIN venues ON events.venue_id = venues.venue_id WHERE events.event_id = :id");
+        $stm = $db->prepare("SELECT * FROM events WHERE events.event_id = :id");
+        // $stm = $db->prepare("SELECT * FROM events JOIN venues ON events.venue_id = venues.venue_id WHERE events.event_id = :id");
         $stm->bindParam(':id', $id, Database::PARAM_INT);
         $stm->execute();
-        $res = $stm->fetchAll(Database::FETCH_ASSOC);
-        $eventIDs = array();
+        $res = $stm->fetchAll();
+        /*$eventIDs = array();
         $events = array();
         foreach ($res as $event) {
             $eventIDs[] = (int)$event['event_id'];
@@ -58,8 +60,8 @@ class eventController extends Controller {
         foreach ($results as $result) {
             $events[$result['event_id']]['artists'][] = array('artist_id' => $result['artist_id'], 'artist_org_id' => $result['artist_org_id'],
                 'artist_name' => $result['artist_name'], 'artist_image' => $result['artist_image']);
-        }
-        $this->outputJSON("All events", $events);
+        }*/
+        $this->outputJSON("All events", $res);
     }
 
     /**
@@ -67,11 +69,12 @@ class eventController extends Controller {
      */
     public function typeAction($type) {
         $db = Database::get();
-        $stm = $db->prepare("SELECT * FROM events JOIN venues ON events.venue_id = venues.venue_id WHERE events.event_type = :type");
+        $stm = $db->prepare("SELECT * FROM events WHERE events.event_type = :type");
+        // $stm = $db->prepare("SELECT * FROM events JOIN venues ON events.venue_id = venues.venue_id WHERE events.event_type = :type");
         $stm->bindParam(':type', $type, Database::PARAM_STR);
         $stm->execute();
-        $res = $stm->fetchAll(Database::FETCH_ASSOC);
-        $eventIDs = array();
+        $res = $stm->fetchAll();
+        /*$eventIDs = array();
         $events = array();
         foreach ($res as $event) {
             $eventIDs[] = (int)$event['event_id'];
@@ -84,8 +87,8 @@ class eventController extends Controller {
         foreach ($results as $result) {
             $events[$result['event_id']]['artists'][] = array('artist_id' => $result['artist_id'], 'artist_org_id' => $result['artist_org_id'],
                 'artist_name' => $result['artist_name'], 'artist_image' => $result['artist_image']);
-        }
-        $this->outputJSON("All events", $events);
+        }*/
+        $this->outputJSON("All events", $res);
     }
 
     /**
@@ -93,11 +96,12 @@ class eventController extends Controller {
      */
     public function dateAction($date) {
         $db = Database::get();
-        $stm = $db->prepare("SELECT * FROM events JOIN venues ON events.venue_id = venues.venue_id WHERE events.event_date = :date");
+        $stm = $db->prepare("SELECT * FROM events WHERE events.event_date = :date");
+        // $stm = $db->prepare("SELECT * FROM events JOIN venues ON events.venue_id = venues.venue_id WHERE events.event_date = :date");
         $stm->bindParam(':date', $date, Database::PARAM_STR);
         $stm->execute();
-        $res = $stm->fetchAll(Database::FETCH_ASSOC);
-        $eventIDs = array();
+        $res = $stm->fetchAll();
+        /*$eventIDs = array();
         $events = array();
         foreach ($res as $event) {
             $eventIDs[] = (int)$event['event_id'];
@@ -110,8 +114,8 @@ class eventController extends Controller {
         foreach ($results as $result) {
             $events[$result['event_id']]['artists'][] = array('artist_id' => $result['artist_id'], 'artist_org_id' => $result['artist_org_id'],
                 'artist_name' => $result['artist_name'], 'artist_image' => $result['artist_image']);
-        }
-        $this->outputJSON("All events", $events);
+        }*/
+        $this->outputJSON("All events", $res);
     }
 
     /**
@@ -119,11 +123,12 @@ class eventController extends Controller {
      */
     public function timeAction($time) {
         $db = Database::get();
-        $stm = $db->prepare("SELECT * FROM events JOIN venues ON events.venue_id = venues.venue_id WHERE events.event_time = :time");
+        $stm = $db->prepare("SELECT * FROM events WHERE events.event_time = :time");
+        // $stm = $db->prepare("SELECT * FROM events JOIN venues ON events.venue_id = venues.venue_id WHERE events.event_time = :time");
         $stm->bindParam(':time', $time, Database::PARAM_STR);
         $stm->execute();
-        $res = $stm->fetchAll(Database::FETCH_ASSOC);
-        $eventIDs = array();
+        $res = $stm->fetchAll();
+        /*$eventIDs = array();
         $events = array();
         foreach ($res as $event) {
             $eventIDs[] = (int)$event['event_id'];
@@ -136,8 +141,8 @@ class eventController extends Controller {
         foreach ($results as $result) {
             $events[$result['event_id']]['artists'][] = array('artist_id' => $result['artist_id'], 'artist_org_id' => $result['artist_org_id'],
                 'artist_name' => $result['artist_name'], 'artist_image' => $result['artist_image']);
-        }
-        $this->outputJSON("All events", $events);
+        }*/
+        $this->outputJSON("All events", $res);
     }
 
     /**
@@ -145,11 +150,12 @@ class eventController extends Controller {
      */
     public function ageRestrictionAction($agerest) {
         $db = Database::get();
-        $stm = $db->prepare("SELECT * FROM events JOIN venues ON events.venue_id = venues.venue_id WHERE events.event_age_restr = :agerestr");
+        $stm = $db->prepare("SELECT * FROM events WHERE events.event_age_restr = :agerestr");
+        // $stm = $db->prepare("SELECT * FROM events JOIN venues ON events.venue_id = venues.venue_id WHERE events.event_age_restr = :agerestr");
         $stm->bindParam(':agerestr', $agerest, Database::PARAM_STR);
         $stm->execute();
-        $res = $stm->fetchAll(Database::FETCH_ASSOC);
-        $eventIDs = array();
+        $res = $stm->fetchAll();
+        /*$eventIDs = array();
         $events = array();
         foreach ($res as $event) {
             $eventIDs[] = (int)$event['event_id'];
@@ -162,8 +168,8 @@ class eventController extends Controller {
         foreach ($results as $result) {
             $events[$result['event_id']]['artists'][] = array('artist_id' => $result['artist_id'], 'artist_org_id' => $result['artist_org_id'],
                 'artist_name' => $result['artist_name'], 'artist_image' => $result['artist_image']);
-        }
-        $this->outputJSON("All events", $events);
+        }*/
+        $this->outputJSON("All events", $res);
     }
 
     /**
@@ -171,11 +177,12 @@ class eventController extends Controller {
      */
     public function titleAction($title) {
         $db = Database::get();
-        $stm = $db->prepare("SELECT * FROM events JOIN venues ON events.venue_id = venues.venue_id WHERE events.event_title LIKE :title");
+        $stm = $db->prepare("SELECT * FROM events WHERE events.event_title LIKE :title");
+        // $stm = $db->prepare("SELECT * FROM events JOIN venues ON events.venue_id = venues.venue_id WHERE events.event_title LIKE :title");
         $stm->bindParam(':title', $title, Database::PARAM_STR);
         $stm->execute();
-        $res = $stm->fetchAll(Database::FETCH_ASSOC);
-        $eventIDs = array();
+        $res = $stm->fetchAll();
+        /*$eventIDs = array();
         $events = array();
         foreach ($res as $event) {
             $eventIDs[] = (int)$event['event_id'];
@@ -188,21 +195,21 @@ class eventController extends Controller {
         foreach ($results as $result) {
             $events[$result['event_id']]['artists'][] = array('artist_id' => $result['artist_id'], 'artist_org_id' => $result['artist_org_id'],
                 'artist_name' => $result['artist_name'], 'artist_image' => $result['artist_image']);
-        }
-        $this->outputJSON("All events", $events);
+        }*/
+        $this->outputJSON("All events", $res);
     }
 
     /**
      * Parameter $turl must be set. Get all events with a certain ticket URL.
-     *              FUNKAR INTE JUST NU.
      */
     public function ticketURLAction($turl) {
         $db = Database::get();
-        $stm = $db->prepare("SELECT * FROM events JOIN venues ON events.venue_id = venues.venue_id WHERE events.event_ticket_uri LIKE :ticket");
+        $stm = $db->prepare("SELECT * FROM events WHERE events.event_ticket_uri LIKE :ticket");
+        // $stm = $db->prepare("SELECT * FROM events JOIN venues ON events.venue_id = venues.venue_id WHERE events.event_ticket_uri LIKE :ticket");
         $stm->bindParam(':ticket', $turl, Database::PARAM_STR);
         $stm->execute();
         $res = $stm->fetchAll(Database::FETCH_ASSOC);
-        $eventIDs = array();
+        /*$eventIDs = array();
         $events = array();
         foreach ($res as $event) {
             $eventIDs[] = (int)$event['event_id'];
@@ -215,7 +222,7 @@ class eventController extends Controller {
         foreach ($results as $result) {
             $events[$result['event_id']]['artists'][] = array('artist_id' => $result['artist_id'], 'artist_org_id' => $result['artist_org_id'],
                 'artist_name' => $result['artist_name'], 'artist_image' => $result['artist_image']);
-        }
-        $this->outputJSON("All events", $events);
+        }*/
+        $this->outputJSON("All events", $res);
     }
 }
