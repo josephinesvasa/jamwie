@@ -1,22 +1,67 @@
 <?php
-namespace Project\Controllers;
+/*namespace Project\Controllers;
 
 use Ionian\Core\Controller;
 use Ionian\Database\Database;
 use PDO;
 
+
 class apiController extends Controller
 {
+
     public function indexAction()
     {
+        $this->backupDelete();
         $api = $this->getSongkickApiAction();
         $this->insertDbAction($api);
-        //$this->getLastfmApiAction("Carubine");
+    }
+
+    public function getDate(){
+        $dateToday=date("Y-m-d");
+        return $dateToday;
+    }
+    public function getTime(){
+        $timeToday=date("h:i:s");
+        return $timeToday;
+    }
+    public  function getDateTomorrow(){
+        $tomorrow = $this->getDate();
+        $date = date_create($tomorrow);
+        date_modify($date, '+1 day');
+        return date_format($date, 'Y-m-d');
+    }
+
+    public function backupDelete()
+    {
+        $db = Database::get();
+        $length = 5;
+        $available = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $chlength = strlen($available);
+        $random = '';
+        $dateToday=date("Y-m-d");
+        for ($x = 0; $x < $length; $x++) {
+            $random .= $available[rand(0, $chlength - 1)];
+        }
+        $eventArtistFilename = 'eventartists-'.$dateToday.'-'.$random.'-'.'.csv';
+        $sql2 = $db->prepare("SELECT * FROM event_artists INTO OUTFILE '$eventArtistFilename' FIELDS ENCLOSED BY '\"' TERMINATED BY '\;' ESCAPED BY '\"'");
+        if ($sql2->execute()) {
+            $stm = $db->prepare("DELETE FROM event_artists");
+            $stm->execute();
+        }
+        $eventFilename = 'events-'.$dateToday.'-'.$random.'-'.'.csv';
+        $sql = $db->prepare("SELECT * FROM events INTO OUTFILE '$eventFilename' FIELDS ENCLOSED BY '\"' TERMINATED BY '\;' ESCAPED BY '\"'");
+        if ($sql->execute()) {
+            $stm = $db->prepare("DELETE FROM events");
+            $stm->execute();
+        }
+
     }
 
     public function getSongkickApiAction()
     {
-        $data = file_get_contents("http://api.songkick.com/api/3.0/events.json?apikey=4lLW1CkAU1uKMqJl&location=sk:32252&min_date=2015-04-29&max_date=2015-04-30");
+        $today=$this->getDate();
+        $tomorrow=$this->getDateTomorrow();
+        $data = file_get_contents("http://api.songkick.com/api/3.0/events.json?apikey=4lLW1CkAU1uKMqJl&location=sk:32252&min_date=$today&max_date=$tomorrow");
         $data = json_decode($data, true);
         $data = $data["resultsPage"]["results"]["event"];
         return $data;
@@ -27,13 +72,30 @@ class apiController extends Controller
     {
         $data = file_get_contents("http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=$artist&api_key=cab5f651e806648c473644101ac30b33&format=json");
         $data = json_decode($data, true);
-        $check_array = $data['results']['artistmatches']['artist'];
+        if($data['results']['opensearch:totalResults']!= "0"){
+            $check_array = $data['results']['artistmatches']['artist'];
 
-        if (array_key_exists(0, $check_array)) {
-            $data = $data['results']['artistmatches']['artist'][0]['image'][4]['#text'];
-        } else {
-            $data = $data['results']['artistmatches']['artist']['image'][4]['#text'];
+            if (array_key_exists(0, $check_array)) {
+                if($data['results']['artistmatches']['artist'][0]['image'][4]['#text'] == ""){
+                    $data="";
+                }
+                else{
+                    $data = $data['results']['artistmatches']['artist'][0]['image'][4]['#text'];
+                }
+            }
+            else {
+                if($data['results']['artistmatches']['artist']['image'][4]['#text'] == ""){
+                    $data="";
+                }
+                else{
+                    $data = $data['results']['artistmatches']['artist']['image'][4]['#text'];
+                }
+            }
         }
+        else{
+            $data = "";
+        }
+
         return $data;
     }
 
@@ -62,29 +124,7 @@ class apiController extends Controller
         return $image;
     }
 
-    function backupDelete() {
-        $db = Database::get();
-        $length = 5;
-        $available = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $chlength = strlen($available);
-        $random = '';
-        for ($x = 0; $x < $length; $x++) {
-            $random .= $available[rand(0, $chlength - 1)];
-        }
-        $dateToday=date("Y-m-d");
-        $eventFilename = 'events-'.$dateToday.'-'.$random.'-'.'.csv';
-        $sql = $db->prepare("SELECT * FROM events INTO OUTFILE '$eventFilename' FIELDS ENCLOSED BY '\"' TERMINATED BY '\;' ESCAPED BY '\"'");
-        if ($sql->execute()) {
-            $stm = $db->prepare("DELETE FROM events");
-            $stm->execute();
-        }
-        $eventArtistFilename = 'eventartists-'.$dateToday.'-'.$random.'-'.'.csv';
-        $sql2 = $db->prepare("SELECT * FROM event_artists INTO OUTFILE '$eventArtistFilename' FIELDS ENCLOSED BY '\"' TERMINATED BY '\;' ESCAPED BY '\"'");
-        if ($sql2->execute()) {
-            $stm = $db->prepare("DELETE FROM event_artists");
-            $stm->execute();
-        }
-    }
+
 
     public function insertDbAction($data)
     {
@@ -168,7 +208,7 @@ class apiController extends Controller
                 $artist_name = $performance[$x]['artist']['displayName'];
                 $artist_name_image = str_replace(' ', '+', $artist_name);
                 $artist_image = $this->getLastfmApiAction($artist_name_image);
-                if ($artist_image != true) {
+                if ($artist_image != true || $artist_image == "") {
                     $artist_image = "http://thetasa.org/wp-content/uploads/2014/05/thumbnail-default.jpg";
                 }
                 $stm_check_artist = $db->prepare("select artist_org_id, artist_id from artists where artist_org_id=:artist_org_id");

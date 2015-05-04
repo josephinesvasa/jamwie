@@ -18,13 +18,4 @@ abstract class Controller{
 
         print_r(json_encode($dump, JSON_PRETTY_PRINT));
     }
-
-    public function getDate(){
-        $dateToday=date("Y-m-d");
-        return $dateToday;
-    }
-    public function getTime(){
-        $timeToday=date("h:i:s");
-        return $timeToday;
-    }
 }
