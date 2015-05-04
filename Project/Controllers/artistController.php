@@ -14,7 +14,7 @@ class artistController extends Controller {
     /**
      * jamwie/artist/all generates all artists and the events they have planned.
      */
-    public function allAction() {
+   public function allAction() {
         $db = Database::get();
         $stm = $db->prepare("SELECT * FROM artists");
         $stm->execute();
@@ -25,6 +25,7 @@ class artistController extends Controller {
             $artistIDs[] = (int)$artist['artist_id'];
             $artists[$artist['artist_id']] = $artist;
             $artists[$artist['artist_id']]['events'] = array();
+
         }
         $stmt = $db->prepare('SELECT * FROM event_artists JOIN events ON event_artists.event_id = events.event_id
         JOIN venues ON events.venue_id = venues.venue_id WHERE event_artists.artist_id IN ('.implode(',', $artistIDs).')');
@@ -40,6 +41,8 @@ class artistController extends Controller {
         }
         $this->outputJSON("All artists and their events", $artists);
     }
+
+
     /**
      * jamwie/artist/name/$name
      * Parameter $name must be set. Get all upcoming events for the artist '$name'.
