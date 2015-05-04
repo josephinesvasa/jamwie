@@ -1,8 +1,10 @@
 <?php
 namespace Project\Controllers;
+
 use Ionian\Core\Controller;
 use Ionian\Database\Database;
 use PDO;
+
 class apiController extends Controller
 {
     public function indexAction()
@@ -18,6 +20,7 @@ class apiController extends Controller
         $data = json_decode($data, true);
         $data = $data["resultsPage"]["results"]["event"];
         return $data;
+
     }
 
     public function getLastfmApiAction($artist)
@@ -25,6 +28,7 @@ class apiController extends Controller
         $data = file_get_contents("http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=$artist&api_key=cab5f651e806648c473644101ac30b33&format=json");
         $data = json_decode($data, true);
         $check_array = $data['results']['artistmatches']['artist'];
+
         if (array_key_exists(0, $check_array)) {
             $data = $data['results']['artistmatches']['artist'][0]['image'][4]['#text'];
         } else {
