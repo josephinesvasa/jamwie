@@ -21,7 +21,7 @@ class artistController extends Controller {
         $stm = $db->prepare("SELECT * FROM artists");
         $stm->execute();
         $res = $stm->fetchAll();
-        $artistIDs = array();
+        /*$artistIDs = array();
         $artists = array();
         foreach ($res as $artist) {
             $artistIDs[] = (int)$artist['artist_id'];
@@ -40,7 +40,7 @@ class artistController extends Controller {
                 'event_ticket_uri' => $result['event_ticket_uri'], 'venue_id' => $result['venue_id'], 'venue_org_id' => $result['venue_org_id'],
                 'venue_name' => $result['venue_name'], 'venue_address' => $result['venue_address'], 'venue_city' => $result['venue_city'],
                 'venue_latlng' => $result['venue_latlng'], 'venue_map' => $result['venue_map'],'venue_map_image' => $result['venue_map_image'],);
-        }
+        }*/
         $this->outputJSON("All artists and their events", $res);
     }
 
